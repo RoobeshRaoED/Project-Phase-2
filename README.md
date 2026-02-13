@@ -1,6 +1,5 @@
 # EXAMGUARD: A Confidential Computing–Based AI System for Secure and Bias-Free Exam Evaluation
-Small description about the project like one below
-The integration of a chatbot within a hostel booking system, aimed at streamlining the reservation process for students and improving the overall user experience.
+The development of EXAMGUARD, a secure AI-based automated examination evaluation system designed to confidentially assess student answer scripts using OCR and semantic analysis, streamlining the correction process for faculty while ensuring data privacy, accuracy, and transparency in academic evaluation.
 
 ## About
 <!--Detailed Description about the project-->
