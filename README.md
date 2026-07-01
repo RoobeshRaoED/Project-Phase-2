@@ -1579,115 +1579,1125 @@ html
             event.preventDefault();
 
             const name = document.getElementById('form-name').value.trim();
-            const amount = parseFloat(document.getElementById('form-amount').value);
-            const type = document.getElementById('form-type').value;
-            const tenure = document.getElementById('form-tenure').value;
-
-            if (!name || isNaN(amount) || amount <= 0) {
-                triggerToast("Please provide valid information details.", "⚠️");
-                return;
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housing Loan Management System | HLMS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            navy: '#1b3154',        /* Header Deep Navy Blue */
+                            bg: '#eae8e4',          /* Warm Beige Canvas Backdrop */
+                            sidebarBg: '#f2efea',   /* Soft Light Sidebar Beige */
+                            emerald: '#0c825a',     /* Accent Deep Emerald Green */
+                            emeraldLight: '#e3ebd9',/* Active tab soft background */
+                            border: '#d5d2cb',      /* Slate-beige corporate border */
+                            charcoal: '#2e3a47'     /* Text Primary Charcoal */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif'],
+                    }
+                }
             }
-
-            const appID = "HL" + Math.floor(1000 + Math.random() * 9000);
-            const today = new Date();
-            const dateStr = today.getDate() + ' ' + today.toLocaleString('default', { month: 'short' }) + ' ' + today.getFullYear();
-
-            const newApp = {
-                id: appID,
-                type: type,
-                status: "Under Review",
-                appliedOn: dateStr,
-                amount: amount,
-                tenure: parseInt(tenure)
-            };
-
-            appState.applications.unshift(newApp);
-            renderMainDashboard();
-            triggerToast(`Application file ${appID} locked into bank processing queues!`, "✍️");
-            switchTab('dashboard');
-        }
-
-        // Support desk dispatch
-        function handleSupportSubmit(event) {
-            event.preventDefault();
-            const subject = document.getElementById('support-subject').value;
-            const msg = document.getElementById('support-message').value;
-
-            document.getElementById('support-subject').value = '';
-            document.getElementById('support-message').value = '';
-
-            triggerToast(`Ticket dispatch logged! Our legal officer is responding live.`, "📥");
-
-            // Simulation callback reply
-            setTimeout(() => {
-                triggerToast(`🔔 Help Desk reply added to portfolio alerts center!`, "🔔");
-            }, 6000);
-        }
-
-        // Mock Document upload
-        function simulateDocUpload() {
-            const tag = document.getElementById('upload-doc-tag').value;
-            triggerToast("Encrypting and compiling metadata files ...", "⏳");
-
-            setTimeout(() => {
-                const docNames = {
-                    "Identity Proof": "Aadhaar_PAN_Dossier_Verified.pdf",
-                    "Income Proof": "BankStatement_6Months.pdf",
-                    "Property Document": "StructuralPlan_Approved.pdf"
-                };
-
-                const newDoc = {
-                    id: 'DOC-' + Math.floor(100 + Math.random() * 900),
-                    name: docNames[tag] || "Uploaded_Dossier.pdf",
-                    tag: tag,
-                    status: "Under Review"
-                };
-
-                appState.documents.unshift(newDoc);
-                renderMainDashboard();
-                triggerToast(`✅ File ${newDoc.name} logged into legal vault.`, "📁");
-            }, 1200);
-        }
-
-        // Save profile modifications
-        function saveProfileChanges() {
-            const name = document.getElementById('profile-fullname').value.trim();
-            const email = document.getElementById('profile-email').value.trim();
-            const avatar = document.getElementById('profile-avatar').value.trim();
-
-            if (!name || !email) {
-                triggerToast("Input legitimate settings strings", "⚠️");
-                return;
-            }
-
-            appState.user.name = name;
-            appState.user.email = email;
-            appState.user.avatar = avatar;
-
-            renderMainDashboard();
-            triggerToast("Portfolio accounts settings updated!", "✅");
-            switchTab('dashboard');
-        }
-
-        // --- POPUP TOAST NOTIFICATION UTILITIES ---
-        function triggerToast(text, icon = "✨") {
-            const toast = document.getElementById('toast-notif');
-            document.getElementById('toast-message-text').innerText = text;
-            document.getElementById('toast-icon').innerText = icon;
-
-            toast.classList.add('show');
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // Toggle alerts box
-        function toggleNotifications() {
-            triggerToast("Alerts box cleared. No severe priority alerts found.", "🔔");
-            document.getElementById('notif-badge').classList.add('hidden');
         }
     </script>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #eae8e4;
+            font-family: 'Inter', sans-serif;
+            color: #2e3a47;
+        }
+
+        /* Clean scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 999px;
+        }
+
+        /* --- PURE CSS TAB-ROUTING ENGINE --- */
+        .tab-pane {
+            display: none !important;
+        }
+
+        /* Checkbox-radio state triggers for Side navigation links */
+        body:has(#tab-db:checked) #sidebar-db,
+        body:has(#tab-guide:checked) #sidebar-guide,
+        body:has(#tab-elig:checked) #sidebar-elig,
+        body:has(#tab-appl:checked) #sidebar-appl,
+        body:has(#tab-track:checked) #sidebar-track,
+        body:has(#tab-repay:checked) #sidebar-repay,
+        body:has(#tab-post:checked) #sidebar-post,
+        body:has(#tab-auction:checked) #sidebar-auction,
+        body:has(#tab-docs:checked) #sidebar-docs,
+        body:has(#tab-prof:checked) #sidebar-prof,
+        body:has(#tab-supp:checked) #sidebar-supp {
+            color: #0c825a !important;
+            font-weight: 700;
+            background-color: #e3ebd9 !important;
+            border-left: 4px solid #0c825a;
+        }
+
+        /* Panes Visibility Controllers */
+        body:has(#tab-db:checked) #pane-db { display: block !important; }
+        body:has(#tab-guide:checked) #pane-guide { display: block !important; }
+        body:has(#tab-elig:checked) #pane-elig { display: block !important; }
+        body:has(#tab-appl:checked) #pane-appl { display: block !important; }
+        body:has(#tab-track:checked) #pane-track { display: block !important; }
+        body:has(#tab-repay:checked) #pane-repay { display: block !important; }
+        body:has(#tab-post:checked) #pane-post { display: block !important; }
+        body:has(#tab-auction:checked) #pane-auction { display: block !important; }
+        body:has(#tab-docs:checked) #pane-docs { display: block !important; }
+        body:has(#tab-prof:checked) #pane-prof { display: block !important; }
+        body:has(#tab-supp:checked) #pane-supp { display: block !important; }
+
+        /* Floating effect for assistant mascot */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(1deg); }
+        }
+        .mascot-assistant {
+            animation: float 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <!-- CSS TAB CONTROLLERS (RADIOS) -->
+    <input type="radio" name="tabs" id="tab-db" checked class="hidden">
+    <input type="radio" name="tabs" id="tab-guide" class="hidden">
+    <input type="radio" name="tab-tabs" id="tab-elig" class="hidden">
+    <input type="radio" name="tabs" id="tab-appl" class="hidden">
+    <input type="radio" name="tabs" id="tab-track" class="hidden">
+    <input type="radio" name="tabs" id="tab-repay" class="hidden">
+    <input type="radio" name="tabs" id="tab-post" class="hidden">
+    <input type="radio" name="tabs" id="tab-auction" class="hidden">
+    <input type="radio" name="tabs" id="tab-docs" class="hidden">
+    <input type="radio" name="tabs" id="tab-prof" class="hidden">
+    <input type="radio" name="tabs" id="tab-supp" class="hidden">
+
+    <!-- DEEP NAVY BLUE HEADER (Exactly matching image reference 1000176651.jpg) -->
+    <header class="bg-brand-navy h-16 w-full px-6 flex items-center justify-between sticky top-0 z-50 shadow-md border-b border-slate-800">
+        <div class="flex items-center gap-4">
+            <!-- Hamburger menu icon -->
+            <button class="text-white hover:text-slate-300 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+            
+            <div class="flex flex-col justify-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-5 h-5 border border-white/50 relative flex items-center justify-center">
+                        <span class="text-[9px] text-white font-bold leading-none">L</span>
+                        <div class="absolute inset-0 border-t border-b border-white/20 transform rotate-45"></div>
+                    </div>
+                    <span class="text-white font-extrabold text-lg tracking-tight leading-none">HLMS</span>
+                </div>
+                <span class="text-slate-400 text-[9px] font-semibold uppercase tracking-wider mt-0.5 leading-none">Housing Loan Management System</span>
+            </div>
+        </div>
+
+        <!-- Custom Translucent Search Bar -->
+        <div class="hidden md:flex items-center flex-1 max-w-md mx-8 relative">
+            <span class="absolute left-3.5 text-slate-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </span>
+            <input type="text" placeholder="Search anything..." 
+                   class="w-full bg-white/10 border border-slate-700/50 rounded-lg pl-10 pr-4 py-2 text-xs text-slate-200 placeholder-slate-400 focus:outline-none focus:border-brand-emerald transition">
+        </div>
+
+        <!-- Header Actions -->
+        <div class="flex items-center gap-5">
+            <button class="text-slate-300 hover:text-white transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </button>
+
+            <!-- Alerts Badge with counter '3' -->
+            <button class="text-slate-300 hover:text-white transition relative">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                </svg>
+                <span class="absolute -top-1 -right-1 bg-red-500 text-[8px] font-bold text-white rounded-full w-4 h-4 flex items-center justify-center">3</span>
+            </button>
+
+            <span class="text-slate-600">|</span>
+
+            <!-- Profile Info Bubble -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-slate-700 text-white font-extrabold text-xs flex items-center justify-center border border-slate-600">
+                    JD
+                </div>
+                <div class="hidden sm:flex items-center gap-1 text-slate-200">
+                    <span class="text-xs font-semibold">John Doe</span>
+                    <span class="text-[10px]">▼</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN APP WRAPPER -->
+    <div class="flex-1 flex flex-col lg:flex-row">
+        
+        <!-- SIDE NAVIGATION BAR (Styled strictly with screenshot 2 sidebar theme) -->
+        <aside class="w-full lg:w-64 bg-brand-sidebarBg border-r border-brand-border/45 p-3.5 space-y-5 flex-shrink-0 flex flex-col justify-between">
+            
+            <div class="space-y-1">
+                <!-- Dashboard active link styled exactly in emerald theme -->
+                <label id="sidebar-db" for="tab-db" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-200/50 transition cursor-pointer">
+                    <span class="text-sm">📊</span>
+                    <span>Dashboard</span>
+                </label>
+
+                <label id="sidebar-guide" for="tab-guide" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-200/50 transition cursor-pointer">
+                    <span class="text-sm">📖</span>
+                    <span>Loan Guidance</span>
+                </label>
+
+                <label id="sidebar-elig" for="tab-elig" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-200/50 transition cursor-pointer">
+                    <span class="text-sm">⚖️</span>
+                    <span>Check Eligibility</span>
+                </label>
+
+                <label id="sidebar-appl" for="tab-appl" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-200/50 transition cursor-pointer">
+                    <span class="text-sm">✍️</span>
+                    <span>Apply for Loan</span>
+                </label>
+
+                <label id="sidebar-track" for="tab-track" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-200/50 transition cursor-pointer">
+                    <span class="text-sm">🔍</span>
+                    <span>Loan Status Tracking</span>
+                </label>
+
+                <label id="sidebar-repay" for="tab-repay" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-200/50 transition cursor-pointer">
+                    <span class="text-sm">💳</span>
+                    <span>Repayment</span>
+                </label>
+
+                <!-- Post Disbursement link -->
+                <label id="sidebar-post" for="tab-post" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-200/50 transition cursor-pointer">
+                    <span class="text-sm">🏠</span>
+                    <span>Post Disbursement</span>
+                </label>
+
+                <label id="sidebar-auction" for="tab-auction" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-200/50 transition cursor-pointer">
+                    <span class="text-sm">🔨</span>
+                    <span>Auction Management</span>
+                </label>
+
+                <!-- Documents with notification badge NEW -->
+                <label id="sidebar-docs" for="tab-docs" class="flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-200/50 transition cursor-pointer">
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm">📄</span>
+                        <span>Documents</span>
+                    </div>
+                    <span class="bg-amber-500 text-[8px] font-bold text-white px-1.5 py-0.5 rounded uppercase tracking-wider">NEW</span>
+                </label>
+
+                <label id="sidebar-prof" for="tab-prof" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-200/50 transition cursor-pointer">
+                    <span class="text-sm">⚙️</span>
+                    <span>Profile Settings</span>
+                </label>
+
+                <label id="sidebar-supp" for="tab-supp" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-200/50 transition cursor-pointer">
+                    <span class="text-sm">💬</span>
+                    <span>Support / Help</span>
+                </label>
+            </div>
+
+            <!-- NEED HELP BLOCK (Exactly matching original layout) -->
+            <div class="bg-white rounded-xl border border-brand-border/40 p-4 text-center space-y-3">
+                <h4 class="text-xs font-black tracking-wider text-slate-400 uppercase">Need Help?</h4>
+                <div class="w-10 h-10 mx-auto border border-slate-300 relative flex items-center justify-center">
+                    <div class="absolute inset-0 flex items-center justify-center text-slate-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-[10px] text-slate-500 leading-tight">Our support team is here to assist you.</p>
+                <label for="tab-supp" class="w-full py-2 border border-slate-300 text-slate-700 hover:bg-slate-50 rounded-lg text-[10px] font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                    <span>Contact Support</span>
+                </label>
+            </div>
+        </aside>
+
+        <!-- MAIN CENTRAL CONTENT CONTAINER (Warm beige backdrop) -->
+        <main class="flex-1 bg-brand-bg p-6 lg:p-8 space-y-6">
+
+            <!-- ==================== PANE 1: DASHBOARD ==================== -->
+            <div id="pane-dashboard" class="tab-pane space-y-6">
+                <!-- Welcome heading and CTA -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold tracking-tight text-brand-charcoal">Welcome back, John Doe!</h2>
+                        <p class="text-xs text-slate-500 mt-1">Here's an overview of your loan journey.</p>
+                    </div>
+
+                    <label id="cta-apply-btn" for="tab-appl" class="px-5 py-2.5 bg-brand-emerald hover:bg-emerald-700 text-white font-bold rounded-lg text-xs tracking-wide transition shadow-sm flex items-center gap-2 cursor-pointer">
+                        <span>Apply for New Loan</span>
+                    </label>
+                </div>
+
+                <!-- 5-COLUMN METRIC ROW -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Metric Card 1 -->
+                    <div class="bg-white rounded-xl border border-brand-border/40 p-4 shadow-sm flex flex-col justify-between min-h-[130px]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Active Loans</span>
+                            <span class="text-sm">🏡</span>
+                        </div>
+                        <div class="text-3xl font-black text-brand-charcoal my-2">1</div>
+                        <label for="tab-post" class="text-[10px] font-bold text-brand-emerald hover:underline cursor-pointer">View Details &rarr;</label>
+                    </div>
+
+                    <!-- Metric Card 2 -->
+                    <div class="bg-white rounded-xl border border-brand-border/40 p-4 shadow-sm flex flex-col justify-between min-h-[130px]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Applications</span>
+                            <span class="text-sm">📄</span>
+                        </div>
+                        <div class="text-3xl font-black text-brand-charcoal my-2">2</div>
+                        <label for="tab-track" class="text-[10px] font-bold text-brand-emerald hover:underline cursor-pointer">View All &rarr;</label>
+                    </div>
+
+                    <!-- Metric Card 3 -->
+                    <div class="bg-white rounded-xl border border-brand-border/40 p-4 shadow-sm flex flex-col justify-between min-h-[130px]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">EMI Paid</span>
+                            <span class="text-sm">✅</span>
+                        </div>
+                        <div class="text-3xl font-black text-brand-charcoal my-2">12</div>
+                        <span class="text-[9px] text-slate-400">This Year</span>
+                    </div>
+
+                    <!-- Metric Card 4 -->
+                    <div class="bg-white rounded-xl border border-brand-border/40 p-4 shadow-sm flex flex-col justify-between min-h-[130px]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Next EMI Due</span>
+                            <span class="text-sm">⏳</span>
+                        </div>
+                        <div class="text-lg font-black text-brand-charcoal my-2">₹ 18,750</div>
+                        <span class="text-[9px] text-slate-400">On 05 Jun 2024</span>
+                    </div>
+
+                    <!-- Metric Card 5 -->
+                    <div class="bg-white rounded-xl border border-brand-border/40 p-4 shadow-sm flex flex-col justify-between min-h-[130px]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Outstanding Amount</span>
+                            <span class="text-sm">📈</span>
+                        </div>
+                        <div class="text-lg font-black text-brand-charcoal my-2">₹ 8,45,230</div>
+                        <label for="tab-repay" class="text-[10px] font-bold text-brand-emerald hover:underline cursor-pointer">View Details &rarr;</label>
+                    </div>
+                </div>
+
+                <!-- MIDDLE DECK GRID -->
+                <div class="grid grid-cols-12 gap-6">
+                    
+                    <!-- Card A: Loan Overview -->
+                    <div class="bg-white rounded-xl border border-brand-border/40 p-5 shadow-sm col-span-12 lg:col-span-5 flex flex-col justify-between gap-4">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-black tracking-tight text-slate-800">Loan Overview</h3>
+                                <span class="px-2 py-0.5 text-[9px] font-bold uppercase rounded bg-brand-emeraldLight text-brand-emerald border border-brand-emerald/10">Active</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                                <!-- Minimal Architectural House Vector -->
+                                <div class="sm:col-span-5 bg-slate-50/50 rounded-xl p-3 border border-slate-200/60 h-32 flex items-center justify-center">
+                                    <svg viewBox="0 0 100 100" class="w-20 h-24 text-brand-emerald" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M10 90 L10 50 L50 20 L90 50 L90 90 Z" />
+                                        <path d="M40 90 L40 65 L60 65 L60 90" />
+                                        <circle cx="28" cy="48" r="6" />
+                                        <circle cx="72" cy="48" r="6" />
+                                    </svg>
+                                </div>
+
+                                <!-- Metadata grid -->
+                                <div class="sm:col-span-7 space-y-1 text-xs">
+                                    <div class="flex justify-between border-b border-dashed border-slate-100 pb-1">
+                                        <span class="text-slate-400">Home Loan</span> 
+                                        <span class="font-bold">Active</span>
+                                    </div>
+                                    <div class="flex justify-between border-b border-dashed border-slate-100 pb-1">
+                                        <span class="text-slate-400">Account No.</span> 
+                                        <span class="font-bold">HL1234567890</span>
+                                    </div>
+                                    <div class="flex justify-between border-b border-dashed border-slate-100 pb-1">
+                                        <span class="text-slate-400">Sanctioned Amount</span> 
+                                        <span class="font-bold text-slate-800">₹ 20,00,000</span>
+                                    </div>
+                                    <div class="flex justify-between border-b border-dashed border-slate-100 pb-1">
+                                        <span class="text-slate-400">Interest Rate</span> 
+                                        <span class="font-bold text-slate-800">8.50% p.a.</span>
+                                    </div>
+                                    <div class="flex justify-between border-b border-dashed border-slate-100 pb-1">
+                                        <span class="text-slate-400">Loan Tenure</span> 
+                                        <span class="font-bold text-slate-800">20 Years</span>
+                                    </div>
+                                    <div class="flex justify-between border-b border-dashed border-slate-100 pb-1">
+                                        <span class="text-slate-400">EMI Amount</span> 
+                                        <span class="font-bold text-slate-800">₹ 18,750</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-400">Disbursed Amount</span> 
+                                        <span class="font-bold text-brand-emerald">₹ 11,54,770</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label for="tab-post" class="w-full text-center py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>View Loan Details</span>
+                        </label>
+                    </div>
+
+                    <!-- Card B: EMI Payment Progress -->
+                    <div class="bg-white rounded-xl border border-brand-border/40 p-5 shadow-sm col-span-12 lg:col-span-3 flex flex-col justify-between text-center">
+                        <div>
+                            <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider text-left mb-4">EMI Payment Progress</h3>
+                            
+                            <div class="relative flex items-center justify-center py-2">
+                                <svg class="w-28 h-28 transform -rotate-90">
+                                    <circle cx="56" cy="56" r="44" class="stroke-slate-100" stroke-width="10" fill="transparent"/>
+                                    <circle cx="56" cy="56" r="44" class="stroke-brand-emerald" stroke-width="10" fill="transparent"
+                                            stroke-dasharray="276.46" stroke-dashoffset="110.58"/> <!-- 60% Paid -->
+                                </svg>
+                                <div class="absolute flex flex-col items-center justify-center text-center">
+                                    <span class="text-2xl font-black text-slate-800 leading-none">60%</span>
+                                    <span class="text-[9px] text-slate-400 uppercase tracking-widest font-semibold mt-1">Paid</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2 mt-4 text-xs text-left">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-brand-emerald font-bold">✔</span>
+                                        <span class="text-slate-500">EMI Paid</span>
+                                    </div>
+                                    <span class="font-bold text-slate-700">12 (60%)</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-slate-300 font-bold">⚙</span>
+                                        <span class="text-slate-500">EMI Remaining</span>
+                                    </div>
+                                    <span class="font-bold text-slate-700">8 (40%)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="w-full text-center mt-4 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer" for="tab-repay">
+                            <span>View Repayment Schedule</span>
+                        </label>
+                    </div>
+
+                    <!-- Card C: Quick Actions -->
+                    <div class="bg-white rounded-xl border border-brand-border/40 p-5 shadow-sm col-span-12 lg:col-span-4 space-y-3 flex flex-col justify-between">
+                        <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider">Quick Actions</h3>
+                        
+                        <div class="space-y-2 flex-1 flex flex-col justify-around">
+                            <label for="tab-elig" class="w-full flex items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:border-brand-emerald/45 hover:bg-slate-50/50 transition text-xs cursor-pointer">
+                                <span class="font-bold text-slate-700">Check Loan Eligibility</span>
+                                <span class="text-slate-400">&rarr;</span>
+                            </label>
+                            <label for="tab-elig" class="w-full flex items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:border-brand-emerald/45 hover:bg-slate-50/50 transition text-xs cursor-pointer">
+                                <span class="font-bold text-slate-700">EMI Calculator</span>
+                                <span class="text-slate-400">&rarr;</span>
+                            </label>
+                            <label for="tab-repay" class="w-full flex items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:border-brand-emerald/45 hover:bg-slate-50/50 transition text-xs cursor-pointer">
+                                <span class="font-bold text-slate-700">Download Statement</span>
+                                <span class="text-slate-400">&rarr;</span>
+                            </label>
+                            <label for="tab-docs" class="w-full flex items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:border-brand-emerald/45 hover:bg-slate-50/50 transition text-xs cursor-pointer">
+                                <span class="font-bold text-slate-700">Upload Document</span>
+                                <span class="text-slate-400">&rarr;</span>
+                            </label>
+                            <label for="tab-track" class="w-full flex items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:border-brand-emerald/45 hover:bg-slate-50/50 transition text-xs cursor-pointer">
+                                <span class="font-bold text-slate-700">Track Application</span>
+                                <span class="text-slate-400">&rarr;</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTTOM DECK CONTAINER -->
+                <div class="grid grid-cols-12 gap-6">
+                    <!-- Recent Applications Table -->
+                    <div class="bg-white rounded-xl border border-brand-border/40 p-5 shadow-sm col-span-12 lg:col-span-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-black tracking-tight text-slate-800">Recent Applications</h3>
+                            <label for="tab-track" class="text-xs font-bold text-brand-emerald hover:underline cursor-pointer">View All</label>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-100">
+                                        <th class="py-3 px-4">Application ID</th>
+                                        <th class="py-3 px-4">Loan Type</th>
+                                        <th class="py-3 px-4">Status</th>
+                                        <th class="py-3 px-4">Applied On</th>
+                                        <th class="py-3 px-4 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr>
+                                        <td class="py-3 px-4 font-bold">HL1234</td>
+                                        <td class="py-3 px-4">Home Loan</td>
+                                        <td class="py-3 px-4">
+                                            <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-50 text-amber-600 border border-amber-200">In Progress</span>
+                                        </td>
+                                        <td class="py-3 px-4">20 May 2024</td>
+                                        <td class="py-3 px-4 text-right">
+                                            <label for="tab-track" class="font-bold text-brand-emerald hover:underline cursor-pointer">View Details &rarr;</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 font-bold">HL1122</td>
+                                        <td class="py-3 px-4">Home Loan</td>
+                                        <td class="py-3 px-4">
+                                            <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-50 text-blue-600 border border-blue-200">Under Review</span>
+                                        </td>
+                                        <td class="py-3 px-4">10 Apr 2024</td>
+                                        <td class="py-3 px-4 text-right">
+                                            <label for="tab-track" class="font-bold text-brand-emerald hover:underline cursor-pointer">View Details &rarr;</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 font-bold">HL0987</td>
+                                        <td class="py-3 px-4">Home Loan Top-Up</td>
+                                        <td class="py-3 px-4">
+                                            <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-brand-emeraldLight text-brand-emerald border border-brand-emerald/10">Approved</span>
+                                        </td>
+                                        <td class="py-3 px-4">15 Mar 2024</td>
+                                        <td class="py-3 px-4 text-right">
+                                            <label for="tab-track" class="font-bold text-brand-emerald hover:underline cursor-pointer">View Details &rarr;</label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Panel -->
+                    <div class="bg-white rounded-xl border border-brand-border/40 p-5 shadow-sm col-span-12 lg:col-span-4 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-sm font-black tracking-tight text-slate-800">Notifications</h3>
+                        </div>
+
+                        <div class="space-y-4 text-xs">
+                            <div class="flex items-start gap-3">
+                                <span class="text-slate-400 text-sm mt-0.5">🔔</span>
+                                <div>
+                                    <p class="text-slate-700 leading-normal font-semibold">EMI of ₹ 18,750 is due on 05 Jun 2024.</p>
+                                    <span class="text-[9px] text-slate-400 block mt-0.5">2 hours ago</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <span class="text-slate-400 text-sm mt-0.5">🔔</span>
+                                <div>
+                                    <p class="text-slate-700 leading-normal">Your application HL1234 is under processing.</p>
+                                    <span class="text-[9px] text-slate-400 block mt-0.5">1 day ago</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <span class="text-slate-400 text-sm mt-0.5">🔔</span>
+                                <div>
+                                    <p class="text-slate-700 leading-normal font-semibold">Document verification completed successfully.</p>
+                                    <span class="text-[9px] text-slate-400 block mt-0.5">3 days ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PANE 2: LOAN GUIDANCE ==================== -->
+            <div id="pane-guidance" class="tab-pane bg-white rounded-2xl border border-slate-300/40 p-6 shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-xl font-black text-brand-charcoal">📖 Housing Loan Guidance</h2>
+                    <p class="text-xs text-slate-400 mt-1">Step-by-step housing documentation checklist and timeline benchmarks.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed">
+                    <div class="p-4 border border-brand-border/40 rounded-xl space-y-2 bg-slate-50/50">
+                        <span class="text-lg">📊 Step 1</span>
+                        <h4 class="font-bold text-slate-800">Budget Assessment</h4>
+                        <p class="text-slate-500">Calculate target borrowing power thresholds based on monthly obligations, FOIR ratios, and gross family income profiles.</p>
+                    </div>
+                    <div class="p-4 border border-brand-border/40 rounded-xl space-y-2 bg-slate-50/50">
+                        <span class="text-lg">📄 Step 2</span>
+                        <h4 class="font-bold text-slate-800">Documents Compilation</h4>
+                        <p class="text-slate-500">Prepare identity verifications (PAN, Aadhaar), 3 months salary slips, 6 months transaction registers, and registry titles.</p>
+                    </div>
+                    <div class="p-4 border border-brand-border/40 rounded-xl space-y-2 bg-slate-50/50">
+                        <span class="text-lg">🤝 Step 3</span>
+                        <h4 class="font-bold text-slate-800">Legal Review</h4>
+                        <p class="text-slate-500">Bank assessors examine physical properties. Following strict non-encumbrance validation, disbursals are triggered.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PANE 3: CHECK ELIGIBILITY ==================== -->
+            <div id="pane-elig" class="tab-pane grid grid-cols-12 gap-6">
+                <!-- Parameters card -->
+                <div class="bg-white rounded-xl border border-brand-border/40 p-6 shadow-sm col-span-12 lg:col-span-7 space-y-6">
+                    <div>
+                        <h2 class="text-lg font-black text-slate-800">⚖️ Premium Income Eligibility & EMI Calculator</h2>
+                        <p class="text-xs text-slate-400">Modify dynamic values to analyze standard mortgage options instantly.</p>
+                    </div>
+                    <div class="space-y-4 text-xs">
+                        <div class="space-y-1">
+                            <div class="flex justify-between font-bold text-slate-700">
+                                <span>Monthly Net Income</span>
+                                <span class="text-brand-emerald">₹ 75,000</span>
+                            </div>
+                            <input type="range" min="15000" max="500000" step="5000" value="75000" class="w-full accent-brand-emerald cursor-pointer">
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between font-bold text-slate-700">
+                                <span>Existing Debt Obligations</span>
+                                <span class="text-red-500">₹ 10,000</span>
+                            </div>
+                            <input type="range" min="0" max="150000" step="2000" value="10000" class="w-full accent-brand-emerald cursor-pointer">
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between font-bold text-slate-700">
+                                <span>Tenure Range (Years)</span>
+                                <span class="text-brand-emerald">20 Years</span>
+                            </div>
+                            <input type="range" min="5" max="30" step="1" value="20" class="w-full accent-brand-emerald cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculations card -->
+                <div class="bg-brand-navy text-white rounded-xl p-6 col-span-12 lg:col-span-5 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold block">Max Eligible Borrowing Cap</span>
+                        <h3 class="text-3xl font-black text-brand-emeraldLight">₹ 34,50,000</h3>
+                        
+                        <div class="grid grid-cols-2 gap-4 text-xs pt-4 border-t border-slate-700 mt-4">
+                            <div>
+                                <span class="text-slate-400 block text-[9px] uppercase">Installment Limit</span>
+                                <span class="font-bold">₹ 27,500 / mo</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block text-[9px] uppercase">Probability Status</span>
+                                <span class="text-emerald-400 font-bold">Highly Probable</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label for="tab-appl" class="w-full text-center py-2.5 bg-brand-emerald hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition cursor-pointer mt-6 inline-block">
+                        Apply with this Limit
+                    </label>
+                </div>
+            </div>
+
+            <!-- ==================== PANE 4: APPLY FOR LOAN ==================== -->
+            <div id="pane-appl" class="tab-pane max-w-xl mx-auto bg-white rounded-2xl border border-brand-border/40 p-6 shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-lg font-black text-slate-800">✍️ Register Loan Application</h2>
+                    <p class="text-xs text-slate-400 mt-1">Complete this mock form to secure loan registration details.</p>
+                </div>
+                <form class="space-y-4 text-xs" onsubmit="return false;">
+                    <div class="space-y-1">
+                        <label class="block font-bold text-slate-600">Applicant Full Name</label>
+                        <input type="text" value="John Doe" class="w-full p-2.5 rounded-lg border border-slate-200 outline-none focus:border-brand-emerald">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block font-bold text-slate-600">Requested Principal Amount (₹)</label>
+                        <input type="number" value="4500000" class="w-full p-2.5 rounded-lg border border-slate-200 outline-none focus:border-brand-emerald">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="block font-bold text-slate-600">Loan Category</label>
+                            <select class="w-full p-2.5 rounded-lg border border-slate-200 bg-white">
+                                <option>Home Loan</option>
+                                <option>Plot Purchase</option>
+                                <option>Home Renovation</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block font-bold text-slate-600">Tenure Duration</label>
+                            <select class="w-full p-2.5 rounded-lg border border-slate-200 bg-white">
+                                <option>10 Years</option>
+                                <option>15 Years</option>
+                                <option selected>20 Years</option>
+                                <option>30 Years</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-brand-emerald text-white rounded-lg font-bold hover:bg-emerald-700 transition">Submit Application</button>
+                </form>
+            </div>
+
+            <!-- ==================== PANE 5: LOAN STATUS TRACKING ==================== -->
+            <div id="pane-track" class="tab-pane bg-white rounded-2xl border border-brand-border/40 p-6 shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-xl font-black text-brand-charcoal">🔍 Loan Status Tracker</h2>
+                    <p class="text-xs text-slate-400 mt-1">Audit status cycles and milestones of active registers.</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between text-xs font-bold border-b border-slate-100 pb-2">
+                        <span>Application Status: <strong class="text-brand-emerald">Under Review</strong></span>
+                        <span class="text-slate-400">ID: HL1122</span>
+                    </div>
+                    <div class="relative flex flex-col md:flex-row justify-between gap-4 py-4">
+                        <div class="flex-1 p-3 border-l-4 border-brand-emerald bg-emerald-50 text-xs">
+                            <h5 class="font-bold text-brand-emerald">1. Submission</h5>
+                            <p class="text-[10px] text-slate-500 mt-0.5">Verified on 10 Apr 2024</p>
+                        </div>
+                        <div class="flex-1 p-3 border-l-4 border-brand-emerald bg-emerald-50 text-xs">
+                            <h5 class="font-bold text-brand-emerald">2. Document Check</h5>
+                            <p class="text-[10px] text-slate-500 mt-0.5">Verified on 18 Apr 2024</p>
+                        </div>
+                        <div class="flex-1 p-3 border-l-4 border-brand-emerald bg-emerald-50 text-xs">
+                            <h5 class="font-bold text-brand-emerald">3. Legal Review</h5>
+                            <p class="text-[10px] text-slate-500 mt-0.5">In Progress</p>
+                        </div>
+                        <div class="flex-1 p-3 border-l-4 border-slate-200 text-xs">
+                            <h5 class="font-bold text-slate-400">4. Disbursement</h5>
+                            <p class="text-[10px] text-slate-500 mt-0.5">Pending Step 3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PANE 6: REPAYMENT ==================== -->
+            <div id="pane-repay" class="tab-pane bg-white rounded-2xl border border-brand-border/40 p-6 shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-xl font-black text-brand-charcoal">📅 Amortization Matrix</h2>
+                    <p class="text-xs text-slate-400 mt-1">Review complete schedule details.</p>
+                </div>
+                <div class="overflow-x-auto text-xs">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-100">
+                                <th class="py-3 px-4">Cycle</th>
+                                <th class="py-3 px-4">EMI Installment</th>
+                                <th class="py-3 px-4">Principal Part</th>
+                                <th class="py-3 px-4">Interest Part</th>
+                                <th class="py-3 px-4">Remaining Balance</th>
+                                <th class="py-3 px-4 text-right">Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-700">
+                            <tr class="bg-emerald-50/10">
+                                <td class="py-3 px-4 font-bold">Installment #1</td>
+                                <td class="py-3 px-4">₹ 18,750</td>
+                                <td class="py-3 px-4">₹ 4,583</td>
+                                <td class="py-3 px-4">₹ 14,167</td>
+                                <td class="py-3 px-4 font-bold">₹ 8,40,647</td>
+                                <td class="py-3 px-4 text-right"><span class="px-2 py-0.5 rounded text-[10px] bg-brand-emeraldLight text-brand-emerald font-bold">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-bold">Installment #2</td>
+                                <td class="py-3 px-4">₹ 18,750</td>
+                                <td class="py-3 px-4">₹ 4,616</td>
+                                <td class="py-3 px-4">₹ 14,134</td>
+                                <td class="py-3 px-4 font-bold">₹ 8,36,031</td>
+                                <td class="py-3 px-4 text-right"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-500 font-bold">Scheduled</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ==================== PANE 7: POST DISBURSEMENT (Exactly matching image 1000176651.jpg) ==================== -->
+            <div id="pane-post" class="tab-pane space-y-6">
+                <!-- HEADER INFO DECK (Title and Dropdown selectors) -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-border/40 pb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold tracking-tight text-brand-charcoal">Post Disbursement</h2>
+                        <p class="text-xs text-slate-500 mt-1">Manage your loan after disbursement and track property & account details.</p>
+                    </div>
+
+                    <!-- SELECT LOAN DROPDOWN (Perfect mockup match) -->
+                    <div class="relative text-left">
+                        <span class="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-right">Select Loan Account</span>
+                        <div class="mt-1 bg-white border border-slate-300 rounded-lg px-4 py-2 flex items-center gap-3 min-w-[240px] shadow-sm hover:border-slate-400 transition cursor-pointer">
+                            <span class="text-slate-400 text-xs">🏡</span>
+                            <div class="flex-1">
+                                <span class="block text-xs font-bold text-slate-800">HL1234567890 - Home Loan</span>
+                            </div>
+                            <span class="text-slate-400 text-xs">▼</span>
+                        </div>
+                        <span class="block text-[10px] text-slate-500 text-right mt-1 font-medium">Disbursed on: <strong class="text-brand-charcoal">20 May 2024</strong></span>
+                    </div>
+                </div>
+
+                <!-- Core Parameters block -->
+                <div class="grid grid-cols-12 gap-6">
+                    <!-- Main parameters overview card -->
+                    <div class="bg-white rounded-2xl border border-slate-300/40 p-6 col-span-12 lg:col-span-8 shadow-sm flex flex-col md:flex-row items-center gap-8">
+                        <div class="flex-shrink-0 bg-slate-50/50 rounded-2xl p-4 border border-slate-200/60 w-32 h-32 flex items-center justify-center">
+                            <svg viewBox="0 0 100 100" class="w-20 h-20 text-brand-emerald" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 90 L10 50 L50 20 L90 50 L90 90 Z" />
+                                <path d="M40 90 L40 65 L60 65 L60 90" />
+                                <circle cx="28" cy="48" r="6" />
+                                <circle cx="72" cy="48" r="6" />
+                            </svg>
+                        </div>
+
+                        <div class="flex-1 w-full grid grid-cols-1 sm:grid-cols-3 gap-y-4 gap-x-4 text-xs">
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Loan Account No.</span>
+                                    <span class="block text-sm font-black text-slate-800">HL1234567890</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Interest Rate (P.A.)</span>
+                                    <span class="block text-sm font-black text-slate-800">8.50%</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Disbursed Amount</span>
+                                    <span class="block text-sm font-black text-brand-emerald">₹ 42,50,000</span>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Loan Tenure</span>
+                                    <span class="block text-sm font-black text-slate-800">20 Years</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Loan Amount</span>
+                                    <span class="block text-sm font-black text-slate-800">₹ 42,50,000</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Next EMI Due</span>
+                                    <span class="block text-sm font-black text-slate-800">05 Jun 2024</span>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Loan Type</span>
+                                    <span class="block text-sm font-black text-slate-800">Home Loan</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">EMI Amount</span>
+                                    <span class="block text-sm font-black text-slate-800">₹ 32,742</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links side panel -->
+                    <div class="bg-white rounded-2xl border border-slate-300/40 p-6 col-span-12 lg:col-span-4 shadow-sm">
+                        <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider flex items-center gap-2 mb-3">
+                            <span class="text-brand-emerald">✔</span>
+                            <span>Quick Links</span>
+                        </h3>
+                        <div class="divide-y divide-slate-100 text-xs">
+                            <label for="tab-repay" class="py-2.5 flex items-center justify-between text-slate-600 hover:text-brand-emerald transition cursor-pointer">
+                                <span>View Repayment Schedule</span>
+                                <span>&rarr;</span>
+                            </label>
+                            <label for="tab-repay" class="py-2.5 flex items-center justify-between text-slate-600 hover:text-brand-emerald transition cursor-pointer">
+                                <span>View Amortization Schedule</span>
+                                <span>&rarr;</span>
+                            </label>
+                            <label for="tab-repay" class="py-2.5 flex items-center justify-between text-slate-600 hover:text-brand-emerald transition cursor-pointer">
+                                <span>Payment History</span>
+                                <span>&rarr;</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Three Detailed Columns below -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Disbursement block -->
+                    <div class="bg-white rounded-2xl border border-slate-300/40 p-5 shadow-sm space-y-4">
+                        <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider flex items-center gap-2 pb-2 border-b border-slate-100">
+                            <span class="text-brand-emerald">$</span>
+                            <span>Disbursement Details</span>
+                        </h4>
+                        <div class="space-y-3 text-xs leading-relaxed">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Disbursement Date</span>
+                                <span class="font-semibold text-slate-800">20 May 2024</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Reference No.</span>
+                                <span class="font-mono font-semibold text-slate-800">DISB/2024/56789</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Disbursement Mode</span>
+                                <span class="font-semibold text-slate-800">NEFT</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Disbursed To Bank</span>
+                                <span class="font-semibold text-slate-800">HDFC Bank - 1234</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Property block -->
+                    <div class="bg-white rounded-2xl border border-slate-300/40 p-5 shadow-sm space-y-4">
+                        <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider flex items-center gap-2 pb-2 border-b border-slate-100">
+                            <span class="text-brand-emerald">🏠</span>
+                            <span>Property Details</span>
+                        </h4>
+                        <div class="space-y-3 text-xs leading-relaxed">
+                            <div class="flex justify-between gap-4">
+                                <span class="text-slate-400 flex-shrink-0">Property Address</span>
+                                <span class="font-semibold text-slate-800 text-right">123, Green Park, Bangalore - 560001, India</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Property Type</span>
+                                <span class="font-semibold text-slate-800">Residential</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Property Value</span>
+                                <span class="font-semibold text-slate-800">₹ 50,00,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Insurance block -->
+                    <div class="bg-white rounded-2xl border border-slate-300/40 p-5 shadow-sm space-y-4">
+                        <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider flex items-center gap-2 pb-2 border-b border-slate-100">
+                            <span class="text-brand-emerald">🛡️</span>
+                            <span>Insurance Details</span>
+                        </h4>
+                        <div class="space-y-3 text-xs">
+                            <div class="flex justify-between items-center pb-2 border-b border-slate-50">
+                                <div>
+                                    <span class="font-bold text-slate-700 block">Property Insurance</span>
+                                    <span class="text-[9px] text-slate-400">Valid till: 19 May 2025</span>
+                                </div>
+                                <span class="text-brand-emerald font-bold">Active</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <span class="font-bold text-slate-700 block">Life Insurance</span>
+                                    <span class="text-[9px] text-slate-400">Valid till: 19 May 2044</span>
+                                </div>
+                                <span class="text-brand-emerald font-bold">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PANE 8: AUCTION MANAGEMENT ==================== -->
+            <div id="pane-auction" class="tab-pane bg-white rounded-2xl border border-slate-300/40 p-6 shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-xl font-black text-brand-charcoal">🔨 Auction Management</h2>
+                    <p class="text-xs text-slate-400 mt-1">Review active property auction and liquidations records in your zone.</p>
+                </div>
+                <div class="p-8 text-center text-xs text-slate-400 italic bg-slate-50 rounded-xl">
+                    No active auctions registered in this portfolio.
+                </div>
+            </div>
+
+            <!-- ==================== PANE 9: DOCUMENTS ==================== -->
+            <div id="pane-docs" class="tab-pane grid grid-cols-12 gap-6">
+                <div class="bg-white rounded-xl border border-brand-border/40 p-5 shadow-sm col-span-12 lg:col-span-4 space-y-4">
+                    <h3 class="text-sm font-black text-slate-800">Add Documents</h3>
+                    <p class="text-xs text-slate-400">Securely upload identity cards and property deeds.</p>
+                    <div class="p-8 border-2 border-dashed border-slate-200 rounded-xl text-center cursor-pointer bg-slate-50 hover:bg-slate-100 transition">
+                        <span class="text-2xl block mb-1">📤</span>
+                        <span class="text-xs font-bold text-slate-700">Browse folders</span>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl border border-brand-border/40 p-5 shadow-sm col-span-12 lg:col-span-8">
+                    <h3 class="text-sm font-black text-slate-800 mb-4">Active Repository</h3>
+                    <div class="overflow-x-auto text-xs">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-100">
+                                    <th class="py-3 px-4">File Name</th>
+                                    <th class="py-3 px-4">Category</th>
+                                    <th class="py-3 px-4 text-right">Validation</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr>
+                                    <td class="py-3 px-4 font-bold">Aadhaar_Card_John.pdf</td>
+                                    <td class="py-3 px-4">Identity Proof</td>
+                                    <td class="py-3 px-4 text-right"><span class="px-2 py-0.5 rounded text-[10px] bg-brand-emeraldLight text-brand-emerald font-bold">Verified</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-bold">IncomeStatement_FY24.pdf</td>
+                                    <td class="py-3 px-4">Income Verification</td>
+                                    <td class="py-3 px-4 text-right"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-500 font-bold">Under Review</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PANE 10: PROFILE SETTINGS ==================== -->
+            <div id="pane-prof" class="tab-pane max-w-xl mx-auto bg-white rounded-2xl border border-slate-300/40 p-6 shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-lg font-black text-slate-800">⚙️ Profile Settings</h2>
+                    <p class="text-xs text-slate-400 mt-1">Configure your personal coordinate credentials.</p>
+                </div>
+                <div class="space-y-4 text-xs">
+                    <div class="space-y-1">
+                        <label class="block font-bold text-slate-600">Full Name</label>
+                        <input type="text" value="John Doe" class="w-full p-2.5 rounded-lg border border-slate-200 outline-none focus:border-brand-emerald">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block font-bold text-slate-600">Email Coordinates</label>
+                        <input type="email" value="john.doe@gmail.com" class="w-full p-2.5 rounded-lg border border-slate-200 outline-none focus:border-brand-emerald">
+                    </div>
+                    <button class="w-full py-2.5 bg-brand-emerald hover:bg-emerald-700 text-white font-bold rounded-lg transition" onclick="return false;">Save settings</button>
+                </div>
+            </div>
+
+            <!-- ==================== PANE 11: SUPPORT / HELP ==================== -->
+            <div id="pane-supp" class="tab-pane grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl border border-slate-300/40 p-5 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm">Submit Support Ticket</h3>
+                    <form class="space-y-4 text-xs" onsubmit="return false;">
+                        <div class="space-y-1">
+                            <label class="block font-bold text-slate-600">Subject Category</label>
+                            <input type="text" placeholder="e.g. Disbursement delays" class="w-full p-2.5 rounded-lg border border-slate-200 outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block font-bold text-slate-600">Inquiry Message</label>
+                            <textarea rows="4" placeholder="Detail parameters here..." class="w-full p-2.5 rounded-lg border border-slate-200 outline-none resize-none"></textarea>
+                        </div>
+                        <button class="w-full py-2.5 bg-brand-emerald text-white font-bold rounded-lg hover:bg-emerald-700 transition">Dispatch Ticket</button>
+                    </form>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-300/40 p-5 shadow-sm space-y-4 text-xs leading-relaxed">
+                    <h3 class="font-bold text-slate-800 text-sm">Support Desk Coordinates</h3>
+                    <p class="text-slate-500">Contact our financial advisors directly:</p>
+                    <div class="space-y-2 font-semibold text-slate-700">
+                        <p>📞 Toll Free: 1800-123-4567</p>
+                        <p>✉️ Email: support@hlms.com</p>
+                        <p>⏰ Mon - Sat: 9:00 AM - 7:00 PM</p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- FOOTER SECTION (Refined matching styling colors of screenshot) -->
+    <footer class="bg-white border-t border-brand-border/60 py-8 text-xs text-slate-500 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+            
+            <!-- Brand Column -->
+            <div class="lg:col-span-4 space-y-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-5 h-5 border border-slate-300 relative flex items-center justify-center">
+                        <span class="text-[9px] text-slate-800 font-bold leading-none">L</span>
+                    </div>
+                    <span class="font-extrabold text-sm text-slate-800">HLMS</span>
+                </div>
+                <p class="leading-relaxed">We help you achieve your dream home with the best loan solutions and personalized support.</p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="lg:col-span-2 space-y-2">
+                <h4 class="font-bold text-slate-800 uppercase tracking-wider">Quick Links</h4>
+                <ul class="space-y-1">
+                    <li><label for="tab-db" class="hover:underline cursor-pointer">— Dashboard</label></li>
+                    <li><label for="tab-guide" class="hover:underline cursor-pointer">— Loan Guidance</label></li>
+                    <li><label for="tab-elig" class="hover:underline cursor-pointer">— Check Eligibility</label></li>
+                    <li><label for="tab-appl" class="hover:underline cursor-pointer">— Apply for Loan</label></li>
+                </ul>
+            </div>
+
+            <!-- Important Links -->
+            <div class="lg:col-span-2 space-y-2">
+                <h4 class="font-bold text-slate-800 uppercase tracking-wider">Important Links</h4>
+                <ul class="space-y-1">
+                    <li><label for="tab-elig" class="hover:underline cursor-pointer">— EMI Calculator</label></li>
+                    <li><label for="tab-repay" class="hover:underline cursor-pointer">— Interest Rates</label></li>
+                    <li><label for="tab-supp" class="hover:underline cursor-pointer">— FAQs</label></li>
+                    <li><a href="#" class="hover:underline">— Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <!-- Support -->
+            <div class="lg:col-span-2 space-y-2">
+                <h4 class="font-bold text-slate-800 uppercase tracking-wider">Support</h4>
+                <ul class="space-y-1">
+                    <li class="font-bold text-slate-800">📞 1800-123-4567</li>
+                    <li class="text-slate-400">✉️ support@hlms.com</li>
+                </ul>
+            </div>
+
+            <!-- Mobile Apps -->
+            <div class="lg:col-span-2 space-y-2">
+                <h4 class="font-bold text-slate-800 uppercase tracking-wider">Download App</h4>
+                <div class="space-y-1.5">
+                    <a href="#" class="flex items-center gap-2 p-1.5 border border-slate-200 rounded hover:bg-slate-50 transition">
+                        <span class="text-base">🤖</span>
+                        <div class="text-[9px]">
+                            <span class="block text-slate-400 leading-none">Get it on</span>
+                            <span class="font-bold text-slate-700 leading-none">Google Play</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <div class="max-w-7xl mx-auto px-6 border-t border-slate-200 mt-6 pt-4 text-center text-[10px]">
+            © 2024 HLMS Housing Loan System. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- FLOATING CUTE MASCOT ROBOT HELPER (CSS Animated floating assistant) -->
+    <div class="fixed bottom-6 right-6 z-50 flex items-end gap-3.5 max-w-sm">
+        <div class="bg-slate-900 text-white rounded-2xl p-4 shadow-xl border border-slate-800 text-xs leading-relaxed max-w-[220px]">
+            <span class="block font-bold text-[10px] uppercase tracking-wider text-emerald-400 mb-1">HLMS Assistant</span>
+            Hi John! Click any of the sidebar navigation options to explore different views—all powered by pure HTML and CSS!
+        </div>
+
+        <div class="w-16 h-16 rounded-full bg-white border border-slate-300 shadow-xl flex items-center justify-center mascot-assistant cursor-pointer hover:scale-110 transition-transform duration-300 relative">
+            <svg viewBox="0 0 100 100" class="w-12 h-12">
+                <rect x="18" y="22" width="64" height="56" rx="20" fill="#334155" />
+                <rect x="23" y="27" width="54" height="42" rx="14" fill="#1e293b" />
+                <circle cx="38" cy="48" r="7" fill="#60a5fa" />
+                <circle cx="38" cy="48" r="3" fill="#ffffff" />
+                <circle cx="62" cy="48" r="7" fill="#60a5fa" />
+                <circle cx="62" cy="48" r="3" fill="#ffffff" />
+                <path d="M 44 60 Q 50 64 56 60" stroke="#60a5fa" stroke-width="3" fill="none" stroke-linecap="round" />
+                <circle cx="50" cy="15" r="4" fill="#a78bfa" />
+                <line x1="50" y1="15" x2="50" y2="22" stroke="#a78bfa" stroke-width="3" />
+                <rect x="12" y="38" width="6" height="24" rx="2" fill="#a78bfa" />
+                <rect x="82" y="38" width="6" height="24" rx="2" fill="#a78bfa" />
+            </svg>
+            <span class="absolute top-0 right-1 bg-brand-emerald w-3 h-3 rounded-full border border-white"></span>
+        </div>
+    </div>
+
 </body>
 </html>
 
