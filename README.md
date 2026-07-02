@@ -216,11 +216,7 @@ EXAMGUARD lays the foundation for future intelligent academic governance systems
 
 
 
-
-
-
-
-```html
+```
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -827,114 +823,6 @@ EXAMGUARD lays the foundation for future intelligent academic governance systems
   <!-- COMPREHENSIVE FOOTER SEGMENT (Precisely matching the footer requirements of Image 1) -->
   <footer class="bg-white border-t border-warm mt-12 py-12 px-4 sm:px-6 lg:px-8 text-slate-700">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-      
-      <!-- Logo Block and Brand statement -->
-      <div class="lg:col-span-2 space-y-4">
-        <div class="flex items-center space-x-2.5">
-          <div class="w-8 h-8 rounded bg-[#2d624f] flex items-center justify-center font-bold text-sm text-white">
-            H
-          </div>
-          <div>
-            <h4 class="font-bold text-navy tracking-wider">HLMS</h4>
-            <p class="text-[10px] text-slate-400 uppercase font-light">Housing Loan Management System</p>
-          </div>
-        </div>
-        <p class="text-xs text-slate-500 leading-relaxed max-w-sm">
-          We help you achieve your dream home with the best loan solutions and personalized support.
-        </p>
-        <div class="flex space-x-2">
-          <div class="w-7 h-7 rounded-full bg-[#f6f5f0] flex items-center justify-center border border-warm cursor-pointer hover:bg-slate-100 text-xs">
-            f
-          </div>
-          <div class="w-7 h-7 rounded-full bg-[#f6f5f0] flex items-center justify-center border border-warm cursor-pointer hover:bg-slate-100 text-xs">
-            t
-          </div>
-          <div class="w-7 h-7 rounded-full bg-[#f6f5f0] flex items-center justify-center border border-warm cursor-pointer hover:bg-slate-100 text-xs">
-            in
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Links col -->
-      <div>
-        <h5 class="font-bold text-navy text-xs uppercase tracking-widest mb-4">Quick Links</h5>
-        <ul class="space-y-2.5 text-xs text-slate-500 font-medium">
-          <li><span class="hover:text-pine cursor-pointer">— Dashboard</span></li>
-          <li><span class="hover:text-pine cursor-pointer">— Loan Guidance</span></li>
-          <li><span class="hover:text-pine cursor-pointer">— Check Eligibility</span></li>
-          <li><span class="hover:text-pine cursor-pointer">— Apply for Loan</span></li>
-          <li><span class="hover:text-pine cursor-pointer">— Track Application</span></li>
-        </ul>
-      </div>
-
-      <!-- Important Links col -->
-      <div>
-        <h5 class="font-bold text-navy text-xs uppercase tracking-widest mb-4">Important Links</h5>
-        <ul class="space-y-2.5 text-xs text-slate-500 font-medium">
-          <li><span class="hover:text-pine cursor-pointer">— EMI Calculator</span></li>
-          <li><span class="hover:text-pine cursor-pointer">— Interest Rates</span></li>
-          <li><span class="hover:text-pine cursor-pointer">— FAQs</span></li>
-          <li><span class="hover:text-pine cursor-pointer">— Terms & Conditions</span></li>
-          <li><span class="hover:text-pine cursor-pointer">— Privacy Policy</span></li>
-        </ul>
-      </div>
-
-      <!-- Support and Download App column combo -->
-      <div class="space-y-6">
-        <div>
-          <h5 class="font-bold text-navy text-xs uppercase tracking-widest mb-3">Support</h5>
-          <ul class="space-y-2 text-xs text-slate-500">
-            <li class="flex items-center">
-              <svg class="w-3.5 h-3.5 mr-2 text-pine shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              <span>1800-123-4567</span>
-            </li>
-            <li class="flex items-center">
-              <svg class="w-3.5 h-3.5 mr-2 text-pine shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              <span>support@hlms.com</span>
-            </li>
-            <li class="flex items-start">
-              <svg class="w-3.5 h-3.5 mr-2 text-pine shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>Mon - Sat: 9:00 AM - 7:00 PM</span>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h5 class="font-bold text-navy text-xs uppercase tracking-widest mb-3">Download App</h5>
-          <div class="space-y-2">
-            <!-- App Store Visual Link -->
-            <div class="flex items-center p-2 border border-warm rounded-lg hover:bg-slate-50 transition cursor-pointer">
-              <div class="mr-2 text-slate-800">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.52 14.12l-1.42-.42a1.76 1.76 0 0 0-1.74.45l-.47.47a12.87 12.87 0 0 1-5.11-5.11l.47-.47a1.78 1.78 0 0 0 .45-1.74l-.42-1.42A1.81 1.81 0 0 0 7.49 4H5.01A1.81 1.81 0 0 0 3.2 5.8c0 8.94 7.26 16.2 16.2 16.2a1.81 1.81 0 0 0 1.8-1.81v-2.48a1.81 1.81 0 0 0-1.68-1.79z" />
-                </svg>
-              </div>
-              <div class="text-[9px] leading-tight text-left">
-                <span class="text-slate-400 block uppercase font-medium">Get it on</span>
-                <span class="text-xs font-bold block text-navy">Google Play</span>
-              </div>
-            </div>
-            <!-- App Store Visual Link -->
-            <div class="flex items-center p-2 border border-warm rounded-lg hover:bg-slate-50 transition cursor-pointer">
-              <div class="mr-2 text-slate-800">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-.96.04-2.13.64-2.82 1.45-.6.69-1.12 1.83-.98 2.94.1.08.2.12.3.12.9 0 2-.64 2.51-1.45" />
-                </svg>
-              </div>
-              <div class="text-[9px] leading-tight text-left">
-                <span class="text-slate-400 block uppercase font-medium">Download on the</span>
-                <span class="text-xs font-bold block text-navy">App Store</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
     </div>
 
@@ -950,7 +838,4 @@ EXAMGUARD lays the foundation for future intelligent academic governance systems
 </html>
 
 ```
-
-
-
 
