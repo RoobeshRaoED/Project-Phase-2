@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile Management Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== APP SHELL ===================== -->
+<div id="app">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <div class="brand">
+      <div class="logo">👤</div>
+      <div>
+        <div class="title">Profile Manager</div>
+        <div class="subtitle">Profile Management Dashboard</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" title="Notifications">🔔<span class="icon-dot" id="notifCount">0</span></button>
+      <div class="user-chip" onclick="go('profile')">
+        <div class="user-avatar" id="userInitials">U</div>
+        <div class="user-name" id="userNameTop">User</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <button class="nav-item active" data-view="dashboard" onclick="go('dashboard')"><span class="ic">▦</span> Dashboard</button>
+    <button class="nav-item" data-view="profile" onclick="go('profile')"><span class="ic">◍</span> Profile Settings</button>
+    <button class="nav-item" data-view="security" onclick="go('security')"><span class="ic">🔒</span> Security</button>
+    <button class="nav-item" data-view="preferences" onclick="go('preferences')"><span class="ic">🔔</span> Preferences</button>
+    <div class="sidebar-divider"></div>
+    <button class="nav-item" onclick="resetProfile()"><span class="ic">↺</span> Reset Demo Data</button>
+  </div>
+
+  <!-- Main content -->
+  <div class="main" id="main"><!-- view content injected here --></div>
+
+  <footer class="app-footer">Profile Management Dashboard — Demo build. All data stored locally in your browser (no server / no backend).</footer>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
