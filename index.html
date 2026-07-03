@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile Management Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===================== TOP BAR ===================== -->
+  <div class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <button class="home-btn" onclick="go('dashboard')" title="Home">
+      <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-9"/><path d="M9.5 20v-6h5v6"/></svg>
+    </button>
+    <div class="brand">
+      <div class="title">PMS</div>
+      <div class="subtitle">Profile Management System</div>
+    </div>
+    <div class="topbar-search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="globalSearch" placeholder="Search profile, settings, activity...">
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" title="Notifications" onclick="openNotifPanel()">
+        <svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+        <span class="icon-dot" id="notifCount">2</span>
+      </button>
+      <div class="user-chip" onclick="go('profile')">
+        <div class="user-avatar" id="userInitials">U</div>
+        <div class="user-meta">
+          <div class="user-name" id="userNameTop">User</div>
+          <div class="user-role" id="userRoleTop">Member</div>
+        </div>
+        <svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <div class="sidebar" id="sidebar">
+    <button class="nav-item" data-view="dashboard" onclick="go('dashboard')">
+      <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
+      <span>Dashboard</span>
+    </button>
+    <button class="nav-item" data-view="profile" onclick="go('profile')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.87 3.13-6.5 7-6.5s7 2.63 7 6.5"/></svg>
+      <span>Profile Settings</span>
+    </button>
+    <button class="nav-item" data-view="security" onclick="go('security')">
+      <svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9.5" rx="1.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+      <span>Security</span>
+    </button>
+    <button class="nav-item" data-view="preferences" onclick="go('preferences')">
+      <svg viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h13M21 18h-1"/><circle cx="13" cy="6" r="2"/><circle cx="7" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+      <span>Preferences</span>
+    </button>
+    <button class="nav-item" data-view="activity" onclick="go('activity')">
+      <svg viewBox="0 0 24 24"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg>
+      <span>Activity Log</span>
+    </button>
+    <div class="sidebar-divider"></div>
+    <button class="nav-item nav-item-muted" onclick="resetProfile()">
+      <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+      <span>Reset Demo Data</span>
+    </button>
+  </div>
+
+  <div class="main" id="main"></div>
+  <footer class="app-footer">Profile Management System — Demo build. All data stored locally in your browser (no server / no backend).</footer>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
