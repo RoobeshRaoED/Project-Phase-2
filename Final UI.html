@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HLMS | Housing Loan Management System</title>
+<link rel="stylesheet" href="Final UI.css">
+<link rel="icon" href="./Designer (1).png">
+</head>
+<body>
+
+<!-- ===================== PUBLIC HOMEPAGE ===================== -->
+<div id="homeScreen">
+
+  <!-- ---- NAV ---- -->
+  <nav class="home-nav">
+    <div class="brand" onclick="scrollToSection('home')">
+      <div class="logo"><img src="./Designer (1).png" width="36" style="border-radius:8px;"></div>
+      <div>
+        <div class="title">HLMS</div>
+        <div class="subtitle">Housing Loan Management System</div>
+      </div>
+    </div>
+    <button class="home-hamburger" onclick="toggleHomeNav()">☰</button>
+    <div class="home-nav-links" id="homeNavLinks">
+      <a onclick="scrollToSection('home')">Home</a>
+      <a onclick="scrollToSection('about')">About</a>
+      <a onclick="scrollToSection('products')">Loan Products</a>
+      <a onclick="scrollToSection('howitworks')">How It Works</a>
+      <a onclick="scrollToSection('stakeholders')">Stakeholders</a>
+      <a onclick="scrollToSection('policy')">Policy</a>
+      <div class="home-nav-cta">
+        <button class="btn btn-outline btn-sm" style="color:#fff;border-color:rgba(255,255,255,.35);" onclick="openAuth('login')">Log In</button>
+        <button class="btn btn-teal btn-sm" onclick="openAuth('register')">Register</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ---- HERO ---- -->
+  <header class="hero" id="home">
+    <h1>Your Home Loan Journey, Managed End-to-End</h1>
+    <p class="lead">HLMS brings borrowers, bank officers, the legal &amp; valuation team, and auction bidders onto a single platform — from application and eligibility checks to disbursement, repayment, and SARFAESI recovery.</p>
+    <div class="hero-cta">
+      <button class="btn btn-teal" onclick="openAuth('register')">Apply for a Loan</button>
+      <button class="btn btn-outline" style="background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.35);" onclick="scrollToSection('stakeholders')">Staff / Partner Login</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hs"><div class="n">6</div><div class="l">Loan Products</div></div>
+      <div class="hs"><div class="n">6</div><div class="l">Workflow Stages</div></div>
+      <div class="hs"><div class="n">30yr</div><div class="l">Max Tenure</div></div>
+      <div class="hs"><div class="n">8.4%</div><div class="l">Rates From</div></div>
+    </div>
+  </header>
+
+  <!-- ---- ABOUT ---- -->
+  <section class="section" id="about">
+    <div class="about-grid">
+      <div>
+        <div class="section-head" style="text-align:left;margin:0 0 24px;">
+          <div class="eyebrow">About HLMS</div>
+          <h2>One system for every stage of the loan lifecycle</h2>
+          <p>HLMS digitizes the full housing loan process for the bank and its customers — replacing scattered paperwork with a transparent, trackable workflow for every stakeholder.</p>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="fi-ic">📝</div>
+            <div><h4>Guided Application</h4><p>Eligibility checks, document upload, and product comparison before you apply.</p></div>
+          </div>
+          <div class="feature-item">
+            <div class="fi-ic">🔎</div>
+            <div><h4>Live Tracking</h4><p>Track your file through document verification, credit checks, legal review, and disbursement.</p></div>
+          </div>
+          <div class="feature-item">
+            <div class="fi-ic">⚖️</div>
+            <div><h4>Legal &amp; Valuation</h4><p>Title verification, valuation reports, and SARFAESI-compliant recovery for NPA accounts.</p></div>
+          </div>
+          <div class="feature-item">
+            <div class="fi-ic">🔨</div>
+            <div><h4>e-Auction Marketplace</h4><p>Bank office lists recovered assets; registered bidders track and bid on live auctions.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="card" style="margin-bottom:14px;">
+          <h3>📈 Loan Workflow</h3>
+          <div class="timeline">
+            <div class="tl-item done"><div class="tl-dot">✓</div><div class="tl-body"><h5>Application Submitted</h5><p>Customer Onboarding</p></div></div>
+            <div class="tl-item done"><div class="tl-dot">✓</div><div class="tl-body"><h5>Document Verification</h5><p>Document Verification Cell</p></div></div>
+            <div class="tl-item current"><div class="tl-dot">3</div><div class="tl-body"><h5>Eligibility &amp; Credit Check</h5><p>Credit Appraisal Dept</p></div></div>
+            <div class="tl-item"><div class="tl-dot">4</div><div class="tl-body"><h5>Final Approval &amp; Disbursement</h5><p>Loan Approval Committee</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---- PRODUCTS ---- -->
+  <section class="section alt" id="products">
+    <div class="section-head">
+      <div class="eyebrow">Loan Products</div>
+      <h2>Financing built for every kind of home</h2>
+      <p>Compare rates, tenure, and loan-to-value across all HLMS home loan products.</p>
+    </div>
+    <div class="home-products-grid" id="homeProductsGrid"><!-- injected by renderHomeProducts() --></div>
+  </section>
+
+  <!-- ---- HOW IT WORKS ---- -->
+  <section class="section" id="howitworks">
+    <div class="section-head">
+      <div class="eyebrow">Process</div>
+      <h2>How it works</h2>
+      <p>From registration to disbursement — a simple four-step journey for customers.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card"><div class="num">1</div><h4>Register &amp; Check Eligibility</h4><p>Create your account and get an instant eligibility estimate.</p></div>
+      <div class="step-card"><div class="num">2</div><h4>Apply &amp; Upload Documents</h4><p>Submit your application with KYC, income, and property documents.</p></div>
+      <div class="step-card"><div class="num">3</div><h4>Verification &amp; Approval</h4><p>Document, credit, and legal teams review your file in parallel stages.</p></div>
+      <div class="step-card"><div class="num">4</div><h4>Disbursement &amp; Repayment</h4><p>Funds are disbursed and your EMI schedule becomes trackable online.</p></div>
+    </div>
+  </section>
+
+  <!-- ---- STAKEHOLDERS ---- -->
+  <section class="section alt" id="stakeholders">
+    <div class="section-head">
+      <div class="eyebrow">Stakeholder Access</div>
+      <h2>Every role, one platform</h2>
+      <p>Each stakeholder gets a purpose-built portal. Use the demo credentials to explore any role instantly.</p>
+    </div>
+    <div class="stake-grid">
+      <div class="stake-card">
+        <div class="st-ic">🏠</div>
+        <h4>Customer</h4>
+        <p>Apply for a loan, track your application, and manage repayments.</p>
+        <button class="btn btn-primary btn-sm" onclick="openAuth('login')">Log In</button>
+        <button class="btn btn-outline btn-sm" onclick="goRegisterAs('customer')">Register</button>
+      </div>
+      <div class="stake-card">
+        <div class="st-ic">🛠️</div>
+        <h4>Admin</h4>
+        <p>Manage users, staff accounts, and role-based permissions.</p>
+        <div class="creds">admin@hlms.example.com / Admin@123</div>
+        <button class="btn btn-primary btn-sm" onclick="quickLogin('admin')">Login as Admin</button>
+      </div>
+      <div class="stake-card">
+        <div class="st-ic">⚖️</div>
+        <h4>Legal Team</h4>
+        <p>Verify titles, manage cases, and issue SARFAESI legal notices.</p>
+        <div class="creds">legal@hlms.example.com / Legal@123</div>
+        <button class="btn btn-primary btn-sm" onclick="quickLogin('legal')">Login as Legal Team</button>
+      </div>
+      <div class="stake-card">
+        <div class="st-ic">🏢</div>
+        <h4>Bank Office</h4>
+        <p>Oversee disbursement, NPA classification, and portfolio reports.</p>
+        <div class="creds">bankoffice@hlms.example.com / Bank@123</div>
+        <button class="btn btn-primary btn-sm" onclick="quickLogin('bankoffice')">Login as Bank Office</button>
+      </div>
+      <div class="stake-card">
+        <div class="st-ic">🔨</div>
+        <h4>Bidder</h4>
+        <p>Browse e-auction listings and place bids on recovered properties.</p>
+        <div class="creds">bidder@hlms.example.com / Bidder@123</div>
+        <button class="btn btn-primary btn-sm" onclick="quickLogin('bidder')">Login as Bidder</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---- POLICY (end of homepage) ---- -->
+  <section class="section alt" id="policy">
+    <div class="section-head">
+      <div class="eyebrow">Legal</div>
+      <h2>Privacy Policy &amp; Terms of Use</h2>
+      <p>Please review how HLMS handles your information before registering.</p>
+    </div>
+    <div class="policy-wrap">
+      <div class="policy-updated">Last updated: July 2026 · Demo build — all data is stored locally in your browser only.</div>
+
+      <h3>1. Overview</h3>
+      <p>This Housing Loan Management System (HLMS) is a demonstration application. It has no live backend server; all accounts, applications, and documents you create are stored in your browser's local storage and are never transmitted to Anthropic, a bank, or any third party.</p>
+
+      <h3>2. Information We Collect</h3>
+      <ul>
+        <li>Account details you enter at registration: name, mobile number, email, ID type/number.</li>
+        <li>Loan application data: employment, income, property, and uploaded document metadata.</li>
+        <li>Usage data such as application status, bids placed, and support requests, all kept locally.</li>
+      </ul>
+
+      <h3>3. How Information Is Used</h3>
+      <p>Data you provide is used only to power the on-screen demo — eligibility calculations, workflow tracking, notifications, and the e-auction marketplace. Nothing is shared externally.</p>
+
+      <h3>4. Data Storage &amp; Security</h3>
+      <p>All records live in your browser's localStorage under this site's origin. Clearing your browser data will permanently remove your accounts and applications. Because this is a demo, do not enter real personal, financial, or identity information.</p>
+
+      <h3>5. Stakeholder Roles</h3>
+      <p>Customer, Admin, Legal Team, Bank Office, and Bidder roles each see only the views and actions relevant to that role, as reflected in the sidebar navigation after login.</p>
+
+      <h3>6. Cookies</h3>
+      <p>HLMS does not use cookies or third-party trackers. Session state is kept via localStorage only.</p>
+
+      <h3>7. Your Choices</h3>
+      <p>You can deactivate or remove your demo account at any time from Profile Settings, or simply clear your browser's site data to erase everything.</p>
+
+      <h3>8. Contact</h3>
+      <p>For questions about this demo, use the in-app Support / Help section available to logged-in customers.</p>
+    </div>
+  </section>
+
+  <!-- ---- FOOTER ---- -->
+  <footer class="home-footer" id="contact">
+    <div class="home-footer-grid">
+      <div>
+        <h5>HLMS</h5>
+        <p>Housing Loan Management System — a unified portal for customers, bank staff, the legal &amp; valuation team, and auction bidders.</p>
+      </div>
+      <div>
+        <h5>Explore</h5>
+        <a onclick="scrollToSection('about')">About</a>
+        <a onclick="scrollToSection('products')">Loan Products</a>
+        <a onclick="scrollToSection('howitworks')">How It Works</a>
+      </div>
+      <div>
+        <h5>Access</h5>
+        <a onclick="scrollToSection('stakeholders')">Stakeholder Login</a>
+        <a onclick="openAuth('login')">Log In</a>
+        <a onclick="openAuth('register')">Register</a>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <a onclick="scrollToSection('policy')">Privacy Policy</a>
+        <a onclick="scrollToSection('policy')">Terms of Use</a>
+      </div>
+    </div>
+    <div class="home-footer-bottom">© <span id="homeYear"></span> HLMS — Demo build. All data stored locally in your browser (no server / no backend).</div>
+  </footer>
+</div>
+
+<!-- ===================== AUTH SCREEN ===================== -->
+<div id="authScreen" class="hidden">
+  <div class="auth-wrap">
+    <div class="auth-side">
+      <img class="auth-image" src="./Designer.png" alt="HLMS">
+    </div>
+    <div class="auth-form" id="authFormArea"><!-- injected --></div>
+  </div>
+</div>
+
+<!-- ===================== APP SHELL ===================== -->
+<div id="app" class="hidden">
+  <div class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <div class="brand">
+      <div class="logo"><img src="./Designer (1).png" width="40px" style="border-radius: 2px;"/></div>
+      <div>
+        <div class="title">HLMS</div>
+        <div class="subtitle">Housing Loan Management System</div>
+      </div>
+    </div>
+    <div class="topbar-search"><input id="globalSearch" placeholder="Search anything..." oninput="handleGlobalSearch(this.value)"></div>
+    <div class="topbar-right">
+      <button class="icon-btn" title="Notifications" onclick="openNotifPanel()">🔔<span class="icon-dot" id="notifCount">0</span></button>
+      <div class="user-chip" onclick="goMyProfile()">
+        <div class="user-avatar" id="userInitials">JD</div>
+        <div class="user-name" id="userNameTop">User</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar" id="sidebar"><!-- injected by renderSidebar() based on role --></div>
+
+  <div class="main" id="main"><!-- view content injected here --></div>
+  <footer class="app-footer">HLMS Customer Portal — Demo build. All data stored locally in your browser (no server / no backend).</footer>
+</div>
+
+<!-- ===================== 404 NOT FOUND ===================== -->
+<div id="notFoundScreen" class="hidden">
+  <div class="nf-box">
+    <p class="nf-code">404</p>
+    <h2 style="margin:0;">Page Not Found</h2>
+    <p>The page you're looking for doesn't exist or may have been moved.</p>
+    <button class="btn btn-teal" onclick="showHome()">Back to Home</button>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="Final UI.js"></script>
+<script>
+/* Render the loan products grid on the homepage using the LOAN_PRODUCTS data from Final UI.js */
+function renderHomeProducts(){
+  const grid = document.getElementById('homeProductsGrid');
+  if(!grid || typeof LOAN_PRODUCTS==='undefined') return;
+  grid.innerHTML = LOAN_PRODUCTS.map(p=>`
+    <div class="product-card">
+      <span class="tag">${p.category}</span>
+      <h4>${p.name}</h4>
+      <div class="rate">${p.rate}% p.a.</div>
+      <p>${p.desc}</p>
+      <div class="chk-row">⏳ Up to ${p.maxTenure} yrs &nbsp; · &nbsp; 📐 Up to ${p.maxLTV} LTV</div>
+    </div>
+  `).join('');
+}
+document.addEventListener('DOMContentLoaded', renderHomeProducts);
+if(document.readyState==='complete' || document.readyState==='interactive') renderHomeProducts();
+</script>
+</body>
+</html>
