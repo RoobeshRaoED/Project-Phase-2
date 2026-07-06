@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HLMS | Housing Loan Management System</title>
+<link rel="stylesheet" href="integration.css">
+<link rel="icon" href="./Designer (1).png">
+</head>
+<body>
+
+<!-- ===================== PropertydocumentSCREEN ===================== -->
+<div id="authScreen">
+  <div class="auth-wrap">
+    <div class="auth-side">
+  <img class="auth-image" src="./Designer.png" alt="HLMS">
+</div>
+    <div class="auth-form" id="authFormArea"><!-- injected --></div>
+  </div>
+</div>
+
+<!-- ===================== APP SHELL ===================== -->
+<div id="app" class="hidden">
+  <div class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <div class="brand">
+      <div class="logo"><img src="./Designer (1).png" width="40px" style="border-radius: 2px;"/></div>
+      <div>
+        <div class="title">HLMS</div>
+        <div class="subtitle">Housing Loan Management System</div>  
+      </div>
+    </div>
+    <div class="topbar-search"><input id="globalSearch" placeholder="Search anything..." oninput="handleGlobalSearch(this.value)"></div>
+    <div class="topbar-right">
+      <button class="icon-btn" title="Notifications" onclick="openNotifPanel()">🔔<span class="icon-dot" id="notifCount">0</span></button>
+      <div class="user-chip" onclick="goMyProfile()">
+        <div class="user-avatar" id="userInitials">JD</div>
+        <div class="user-name" id="userNameTop">User</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar" id="sidebar"><!-- injected by renderSidebar() based on role --></div>
+
+  <div class="main" id="main"><!-- view content injected here --></div>
+  <footer class="app-footer">HLMS Customer Portal — Demo build. All data stored locally in your browser (no server / no backend).</footer>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="integration.js"></script>
+</body>
+</html>
