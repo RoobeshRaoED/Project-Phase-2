@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Not Found | HLMS - Housing Loan Management System</title>
+<style>
+:root{
+  --navy:#1b3a5c;
+  --navy-dark:#132a44;
+  --teal:#2f7d78;
+  --teal-light:#e6f2f1;
+  --bg:#eef1f5;
+  --card:#ffffff;
+  --text:#1f2a37;
+  --text-mid:#4b5666;
+  --text-gray:#8a93a3;
+  --border:#e3e7ee;
+  --radius:12px;
+  --shadow:0 2px 10px rgba(20,40,70,0.06);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+}
+a{color:var(--teal);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+header.site-header{
+  background:var(--navy);
+  color:#fff;
+  padding:0 24px;
+  height:64px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+header.site-header .logo{
+  width:34px;height:34px;border-radius:8px;background:var(--teal);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;
+}
+header.site-header .brand-text .title{font-weight:800;font-size:17px;line-height:1.1;}
+header.site-header .brand-text .subtitle{font-size:10.5px;color:#b9c7da;letter-spacing:.3px;}
+
+main{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+}
+.error-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:48px 44px;
+  max-width:520px;
+  width:100%;
+  text-align:center;
+}
+.error-code{
+  font-size:72px;
+  font-weight:800;
+  color:var(--navy);
+  line-height:1;
+  margin-bottom:6px;
+}
+.error-icon{font-size:40px;margin-bottom:10px;}
+.error-card h1{
+  font-size:20px;
+  margin:0 0 10px;
+  color:var(--navy);
+}
+.error-card p{
+  font-size:14.5px;
+  color:var(--text-mid);
+  line-height:1.6;
+  margin:0 0 26px;
+}
+.error-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 22px;border-radius:8px;border:1px solid transparent;
+  font-size:14px;font-weight:600;transition:.15s;white-space:nowrap;
+}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{background:var(--navy-light,#264d75);}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-mid);}
+.btn-outline:hover{border-color:var(--navy);color:var(--navy);}
+
+.helpful-links{
+  margin-top:28px;
+  padding-top:22px;
+  border-top:1px solid var(--border);
+  text-align:left;
+}
+.helpful-links h2{
+  font-size:12.5px;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+  color:var(--text-gray);
+  margin:0 0 10px;
+}
+.helpful-links ul{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.helpful-links li a{font-size:14px;font-weight:600;}
+
+footer.app-footer{
+  text-align:center;
+  font-size:12.5px;
+  color:var(--text-gray);
+  padding:20px;
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">🏠</div>
+  <div class="brand-text">
+    <div class="title">HLMS</div>
+    <div class="subtitle">Housing Loan Management System</div>
+  </div>
+</header>
+
+<main>
+  <section class="error-card">
+    <div class="error-icon">🧭</div>
+    <div class="error-code">404</div>
+    <h1>We couldn't find that page</h1>
+    <p>The page you're looking for may have been moved, renamed, or doesn't exist. Let's get you back on track.</p>
+    <div class="error-actions">
+      <a class="btn btn-primary" id="homeLink" href="index.html">⬅ Back to Home</a>
+      <a class="btn btn-outline" href="index.html#support">Contact Support</a>
+    </div>
+
+    <div class="helpful-links">
+      <h2>You might be looking for</h2>
+      <ul id="helpfulLinksList">
+        <li><a href="index.html">🏠 Dashboard</a></li>
+        <li><a href="policy.html">📄 Privacy Policy</a></li>
+        <li><a href="index.html#login">🔑 Login</a></li>
+        <li><a href="index.html#register">📝 Register</a></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<script>
+/*
+  Detects the signed-in stakeholder (Admin, Legal Team, Bank Office, Bidder,
+  Loan Officer, Customer, etc.) from the same localStorage session HLMS
+  uses, and points "Back to Home" straight at that role's own dashboard
+  instead of a generic page.
+*/
+(function(){
+  try{
+    var DB_KEY = 'hlms_db_v1';
+    var raw = localStorage.getItem(DB_KEY);
+    if(!raw) return;
+    var db = JSON.parse(raw);
+    if(!db || !db.session || !db.users || !db.users[db.session]) return;
+
+    var role = db.users[db.session].role;
+    var homeView = 'dashboard';
+    var roleLabel = 'Dashboard';
+    if(role==='admin'){ homeView='admindash'; roleLabel='Admin Dashboard'; }
+    else if(role==='legal'){ homeView='legaldash'; roleLabel='Legal Dashboard'; }
+    else if(role==='bankoffice'){ homeView='bodash'; roleLabel='Bank Office Dashboard'; }
+    else if(role==='bidder'){ homeView='bidderdash'; roleLabel='Bidder Dashboard'; }
+    else if(role==='loanofficer'){ homeView='dashboard'; roleLabel='Loan Officer Dashboard'; }
+    else if(role==='employee'){ homeView='dashboard'; roleLabel='Employee Dashboard'; }
+    else { homeView='dashboard'; roleLabel='Customer Dashboard'; }
+
+    var homeUrl = 'index.html#' + homeView;
+    var link = document.getElementById('homeLink');
+    link.href = homeUrl;
+    link.textContent = '⬅ Back to ' + roleLabel;
+
+    var list = document.getElementById('helpfulLinksList');
+    list.innerHTML =
+      '<li><a href="' + homeUrl + '">🏠 ' + roleLabel + '</a></li>' +
+      '<li><a href="policy.html">📄 Privacy Policy</a></li>' +
+      '<li><a href="index.html#support">✉️ Support / Help</a></li>';
+  }catch(e){ /* localStorage unavailable or malformed — fall back to defaults already in the markup */ }
+})();
+</script>
+
+<footer class="app-footer">
+  HLMS Customer Portal — Demo build. <a href="index.html">Back to Home</a>
+</footer>
+
+</body>
+</html>
