@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documents | HLMS</title>
+<style>
+:root{
+  --navy:#1b3a5c;
+  --navy-dark:#132a44;
+  --navy-light:#264d75;
+  --teal:#2f7d78;
+  --teal-light:#e6f2f1;
+  --bg:#eef1f5;
+  --card:#ffffff;
+  --text:#1f2a37;
+  --text-mid:#4b5666;
+  --text-gray:#8a93a3;
+  --border:#e3e7ee;
+  --green:#1f9d55;
+  --green-bg:#e7f7ee;
+  --orange:#e8862c;
+  --orange-bg:#fdf1e4;
+  --red:#d64545;
+  --red-bg:#fbe9e9;
+  --purple:#6a4c9c;
+  --purple-bg:#f0ebf8;
+  --radius:12px;
+  --shadow:0 2px 10px rgba(20,40,70,0.06);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+a{color:var(--teal);text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+
+/* ---------- Shell (simplified, page runs standalone) ---------- */
+.page-wrap{max-width:1100px;margin:0 auto;padding:32px 24px 60px;}
+
+.page-head{margin-bottom:22px;}
+.page-head h1{margin:0 0 4px;font-size:26px;color:var(--navy);display:flex;align-items:center;gap:10px;}
+.page-head p{margin:0;color:var(--text-gray);font-size:14px;}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 20px;border-radius:8px;border:1px solid transparent;
+  font-size:14px;font-weight:600;transition:.15s;white-space:nowrap;
+}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{background:var(--navy-light);}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-mid);}
+.btn-outline:hover{border-color:var(--navy);color:var(--navy);}
+.btn-sm{padding:7px 14px;font-size:13px;}
+
+/* ---------- Cards ---------- */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-bottom:20px;border:1px solid var(--border);}
+.card h3{margin:0 0 4px;font-size:16px;color:var(--navy);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.card .sub{margin:0 0 16px;font-size:12.5px;color:var(--text-mid);}
+
+/* ---------- Badges ---------- */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
+.badge-green{background:var(--green-bg);color:var(--green);}
+.badge-orange{background:var(--orange-bg);color:var(--orange);}
+.badge-red{background:var(--red-bg);color:var(--red);}
+.badge-gray{background:#eef1f5;color:var(--text-mid);}
+.badge-navy{background:var(--teal-light);color:var(--navy);}
+
+/* ---------- Table ---------- */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px;}
+th{text-align:left;padding:10px 8px;color:var(--text-gray);font-size:11.5px;text-transform:uppercase;letter-spacing:.3px;border-bottom:2px solid var(--border);white-space:nowrap;}
+td{padding:11px 8px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+td[data-col="action"]{text-align:right;}
+
+/* ---------- Empty state ---------- */
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-gray);}
+.empty-state .ic{font-size:38px;margin-bottom:10px;}
+.empty-state a{font-weight:600;}
+
+/* ---------- Filter / toolbar ---------- */
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap;}
+.toolbar input[type="search"]{
+  flex:1;min-width:180px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;background:#fbfcfd;
+}
+.toolbar input[type="search"]:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:var(--teal);}
+.toolbar select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;background:#fbfcfd;color:var(--text-mid);}
+
+/* ---------- Responsive: tables collapse to stacked cards on small screens ---------- */
+@media(max-width:700px){
+  .page-wrap{padding:20px 14px 50px;}
+  .page-head h1{font-size:21px;}
+  .card{padding:16px;}
+
+  .table-wrap{overflow-x:visible;}
+  table{min-width:0;}
+  table.responsive-table thead{display:none;}
+  table.responsive-table, table.responsive-table tbody, table.responsive-table tr, table.responsive-table td{
+    display:block;width:100%;
+  }
+  table.responsive-table tr{
+    border:1px solid var(--border);border-radius:10px;margin-bottom:12px;padding:10px 12px;background:#fbfcfd;
+  }
+  table.responsive-table td{
+    border-bottom:none;padding:6px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:right;
+  }
+  table.responsive-table td::before{
+    content:attr(data-label);font-size:11px;font-weight:700;color:var(--text-gray);text-transform:uppercase;letter-spacing:.3px;text-align:left;
+  }
+  table.responsive-table td[data-col="action"]{justify-content:flex-end;}
+  table.responsive-table td[data-col="action"]::before{content:none;}
+
+  .toolbar{flex-direction:column;align-items:stretch;}
+  .toolbar select{width:100%;}
+}
+
+@media(max-width:420px){
+  .page-head h1{font-size:19px;}
+  .btn-sm{padding:6px 10px;font-size:12.5px;}
+}
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <div class="page-head">
+    <h1>📄 Documents</h1>
+    <p>All documents uploaded and generated across your loan applications.</p>
+  </div>
+
+  <!-- ===================== MY DOCUMENTS ===================== -->
+  <div class="card">
+    <h3>🗂️ My Documents</h3>
+    <p class="sub">Documents you uploaded during application, plus system-generated letters.</p>
+
+    <div class="toolbar">
+      <input type="search" id="docSearch" placeholder="Search by application, document or file name..." oninput="filterTable('myDocsTable', this.value)">
+      <select id="docTypeFilter" onchange="filterByType()">
+        <option value="">All Types</option>
+        <option value="Uploaded">Uploaded by me</option>
+        <option value="Generated">System generated</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table class="responsive-table" id="myDocsTable">
+        <thead>
+          <tr><th>Application</th><th>Document</th><th>File</th><th>Date</th><th></th></tr>
+        </thead>
+        <tbody id="myDocsBody"><!-- rows injected --></tbody>
+      </table>
+    </div>
+    <div class="empty-state hidden" id="myDocsEmpty">
+      <div class="ic">🗂️</div>
+      No documents yet. Upload documents while applying for a loan.
+    </div>
+  </div>
+
+  <!-- ===================== LEGAL VERIFICATION STATUS ===================== -->
+  <div class="card">
+    <h3>⚖️ Legal Verification Status</h3>
+    <p class="sub">Post-disbursement documents submitted for legal verification.</p>
+
+    <div class="table-wrap">
+      <table class="responsive-table" id="legalDocsTable">
+        <thead>
+          <tr><th>Application</th><th>Document</th><th>Type</th><th>Uploaded</th><th>Status</th></tr>
+        </thead>
+        <tbody id="legalDocsBody"><!-- rows injected --></tbody>
+      </table>
+    </div>
+    <div class="empty-state hidden" id="legalDocsEmpty">
+      <div class="ic">📭</div>
+      No post-disbursement documents uploaded yet. Use <a href="#">Post Disbursement</a> to upload one for legal verification.
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   Demo data — replace with real data from your app when integrating
+--------------------------------------------------------------- */
+const myDocs = [
+  { app:'HL-2026-00142', name:'Identity Proof',        file:'aadhaar_card.pdf',        date:'2026-04-02', kind:'Uploaded'  },
+  { app:'HL-2026-00142', name:'Income Proof',          file:'salary_slip_mar.pdf',     date:'2026-04-02', kind:'Uploaded'  },
+  { app:'HL-2026-00142', name:'Property Documents',    file:'sale_deed.pdf',           date:'2026-04-03', kind:'Uploaded'  },
+  { app:'HL-2026-00142', name:'Sanction Letter',       file:'system-generated',        date:'2026-05-10', kind:'Generated' },
+  { app:'HL-2026-00142', name:'Disbursement Letter',   file:'system-generated',        date:'2026-05-14', kind:'Generated' },
+  { app:'HL-2025-00087', name:'Bank Statement',        file:'bank_stmt_6m.pdf',        date:'2025-11-20', kind:'Uploaded'  },
+];
+
+const legalDocs = [
+  { app:'HL-2026-00142', name:'Property Insurance Renewal', type:'Insurance',  date:'2026-06-01', status:'Verified' },
+  { app:'HL-2026-00142', name:'NOC – Society',               type:'Legal',      date:'2026-06-12', status:'Pending'  },
+  { app:'HL-2025-00087', name:'Updated Encumbrance Cert.',    type:'Legal',      date:'2026-03-05', status:'Rejected', remarks:'Certificate expired — please re-upload a current copy.' },
+];
+
+function statusBadgeClass(status){
+  if(status === 'Verified') return 'badge-green';
+  if(status === 'Rejected') return 'badge-red';
+  return 'badge-orange';
+}
+
+function renderMyDocs(list){
+  const body = document.getElementById('myDocsBody');
+  const empty = document.getElementById('myDocsEmpty');
+  if(!list.length){
+    body.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  body.innerHTML = list.map(r => `
+    <tr>
+      <td data-label="Application">${r.app}</td>
+      <td data-label="Document">${r.name}</td>
+      <td data-label="File">${r.file}</td>
+      <td data-label="Date">${r.date}</td>
+      <td data-col="action"><button class="btn btn-outline btn-sm" onclick="downloadDoc('${r.app}','${r.name}')">Download</button></td>
+    </tr>
+  `).join('');
+}
+
+function renderLegalDocs(list){
+  const body = document.getElementById('legalDocsBody');
+  const empty = document.getElementById('legalDocsEmpty');
+  if(!list.length){
+    body.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  body.innerHTML = list.map(r => `
+    <tr>
+      <td data-label="Application">${r.app}</td>
+      <td data-label="Document">${r.name}</td>
+      <td data-label="Type">${r.type}</td>
+      <td data-label="Uploaded">${r.date}</td>
+      <td data-label="Status">
+        <span class="badge ${statusBadgeClass(r.status)}">${r.status}</span>
+        ${r.status === 'Rejected' && r.remarks ? `<div style="font-size:11px;color:var(--red);margin-top:3px;">${r.remarks}</div>` : ''}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function downloadDoc(app, name){
+  alert(`Downloading "${name}" for ${app}...`);
+}
+
+function filterTable(tableId, query){
+  query = query.trim().toLowerCase();
+  if(tableId === 'myDocsTable'){
+    const filtered = myDocs.filter(r =>
+      r.app.toLowerCase().includes(query) ||
+      r.name.toLowerCase().includes(query) ||
+      r.file.toLowerCase().includes(query)
+    );
+    renderMyDocs(filtered);
+  }
+}
+
+function filterByType(){
+  const type = document.getElementById('docTypeFilter').value;
+  const filtered = type ? myDocs.filter(r => r.kind === type) : myDocs;
+  renderMyDocs(filtered);
+}
+
+renderMyDocs(myDocs);
+renderLegalDocs(legalDocs);
+</script>
+
+</body>
+</html>
